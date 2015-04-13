@@ -1,0 +1,17 @@
+@import url(http://fonts.googleapis.com/css?family=Unica+One);
+
+html {
+  color: #444;
+  font: 100%/1 "Unica One", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+body { margin: 0; }
+
+a {
+  color: #09c;
+  display: inline-block;
+  padding: 20px;
+}

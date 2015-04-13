@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>React</title>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.6.0/lodash.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react-with-addons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router/0.13.2/ReactRouter.js"></script>
+    <script type="text/jsx">
+      var Router = ReactRouter;
+      var Route = Router.Route;
+      var DefaultRoute = Router.DefaultRoute;
+      var NotFoundRoute = Router.NotFoundRoute;
+      var RouteHandler = Router.RouteHandler;
+      var Link = Router.Link;
+
+      var App = React.createClass({
+        render: function () {
+          var style = {};
+          return (
+            <div style={style}>
+              <Link to="app">Index</Link>
+              <Link to="about">About</Link>
+              <Link to="nests">Nests</Link>
+              <RouteHandler {...this.props} />
+            </div>
+          );
+        }
+      });
+
+      var Index = React.createClass({
+        render: function () {
+          return <h1>Index, yo.</h1>;
+        }
+      });
+
+      var About = React.createClass({
+        render: function () {
+          return <h1>About, yo.</h1>;
+        }
+      });
+
+      var Nests = React.createClass({
+        render: function () {
+          return (
+            <div>
+              <Link to="/nest/86">Nest 86</Link>
+              <Link to="/nests">Nest Fail</Link>
+              <h1>Nests, yo.</h1>
+              <RouteHandler {...this.props} />
+            </div>
+          );
+        }
+      });
+
+      var Nest = React.createClass({
+        propTypes: {
+          params: React.PropTypes.shape({
+            id: React.PropTypes.number
+          })
+        },
+        componentWillMount: function() {
+          console.log('Nest:componentWillMount', this.props.params.id);
+          if (this.props.params.id === 'fail') {}
+        },
+        render: function () {
+          return <h1>Nest no. {this.props.params.id}</h1>;
+        }
+      });
+
+      var NestNotFound = React.createClass({
+        render: function () {
+          return <h1>Nest not found, yo.</h1>;
+        }
+      });
+
+      var NotFound = React.createClass({
+        render: function () {
+          return <h1>Not found, yo.</h1>;
+        }
+      });
+
+      var routes = (
+        <Route name="app" path="/" handler={App}>
+          <DefaultRoute handler={Index} />
+          <Route name="about" handler={About} />
+          <Route name="nests" handler={Nests}>
+            <Route name="nest" path="/nest/:id" handler={Nest} />
+            <NotFoundRoute handler={NestNotFound} />
+          </Route>
+          <NotFoundRoute handler={NotFound} />
+        </Route>
+      );
+
+      Router.run(routes, function (Handler, state) {
+        React.render(<Handler params={state.params} />, document.body);
+      });
+    </script>
+  </body>
+</html>
